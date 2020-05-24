@@ -20,10 +20,10 @@ export function validateEmail(value){
 /**
  * 验证密码 6至20位的字母+数字 
  */
-// export function validatePass(value){
-//     let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
-//     return !reg.test(value) ? true : false;
-// }
+export function validatePass(value){
+    let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
+    return !reg.test(value) ? true : false;
+}
 /**
  * 验证验证码
  */

@@ -10,18 +10,29 @@ module.exports = {
    * webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
    **/
   chainWebpack: (config) => {
+    const svgRule = config.module.rule("svg");
+    svgRule.uses.clear();
+    svgRule
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+      .options({
+        symbolId: "icon-[name]",
+        include: ["./src/icons"]
+      });
+
   },
   configureWebpack: (config) => {
     config.resolve = { // 配置解析别名
       extensions: ['.js', '.json', '.vue'],
       alias: {
+        'vue': 'vue/dist/vue.js',
         '@': path.resolve(__dirname, './src'),
         'public': path.resolve(__dirname, './public'),
         'components': path.resolve(__dirname, './src/components'),
         'common': path.resolve(__dirname, './src/common'),
         'api': path.resolve(__dirname, './src/api'),
         'views': path.resolve(__dirname, './src/views'),
-        'data': path.resolve(__dirname, './src/data')
+        'data': path.resolve(__dirname, './src/data'),
       }
     }
   },
@@ -36,7 +47,7 @@ module.exports = {
     // css预设器配置项
     loaderOptions: {
       // 如发现 css.modules 报错，请查看这里：http://www.web-jshtml.cn/#/detailed?id=12
-      sass: { 
+      sass: {
         prependData: `@import "./src/styles/main.scss";`
       }
     },
@@ -58,7 +69,15 @@ module.exports = {
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false,
-    proxy: null, // 设置代理
+    proxy: {
+      '/devApi': {
+        target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
+        changeOrigin: true,
+        pathRewrite: {
+          '^/devApi': ''
+        }
+      }
+    }, // 设置代理
     overlay: { // 全屏模式下是否显示脚本错误
       warnings: true,
       errors: true
